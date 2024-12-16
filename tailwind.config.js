@@ -4,10 +4,10 @@ export default {
   theme: {
     extend: {
       screens: {
-        sm: "640px", // Small screen size
-        md: "768px", // Medium screen size
-        lg: "1024px", // Large screen size
-        xl: "1280px", // Extra large screen size
+        sm: "480px", //"640px", // Small screen size
+        md: "768px", //"768px", // Medium screen size
+        lg: "976px", //"1024px", // Large screen size
+        xl: "1440px", //"1280px", // Extra large screen size
       },
       container: {
         center: true, // Centers the container horizontally by default

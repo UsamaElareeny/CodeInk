@@ -1,13 +1,14 @@
 import { useState } from "react";
 import "./book.css";
 
-export default function Book({ title, price, ImgSource }) {
+export default function Book({ book }) {
   const [wishList, setWishList] = useState(false);
+
   return (
     <div className="book">
       <div className="image">
         <a href="#book">
-          <img src={ImgSource} alt={`${title} book image`} />
+          <img src={book.coverImageUrl} alt={`${book.title} book image`} />
         </a>
       </div>
       <div className={wishList ? "wishlist-button clicked" : "wishlist-button"}>
@@ -16,8 +17,8 @@ export default function Book({ title, price, ImgSource }) {
         </button>
       </div>
       <div className="book-info">
-        <div className="title">{title}</div>
-        <div className="price">${price} EGP</div>
+        <div className="title">{book.title}</div>
+        <div className="price">${book.price} EGP</div>
       </div>
       <div className="cart-button">
         <button>Add to Cart</button>

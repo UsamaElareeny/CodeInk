@@ -3,6 +3,7 @@ import Books from "../Books/Books";
 import Categories from "../Categories/Categories";
 import axios from "axios";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 export default function Home() {
   const [books, setBooks] = useState({items: []});

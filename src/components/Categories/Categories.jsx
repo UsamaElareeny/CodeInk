@@ -1,20 +1,6 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 
-export default function Categories() {
-  const [categories, setCategories] = useState([]); // State to store categories
-
-  // Fetch categories from the API
-  useEffect(() => {
-    axios
-      .get("http://codeink.runasp.net/api/categories") // Replace with your API endpoint
-      .then((response) => {
-        setCategories(response.data.data); // Assuming categories are in `data`
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+export default function Categories({categories}) {
+  
 
   return (
     <div className="md:w-1/5 w-full hidden md:block mr-12">

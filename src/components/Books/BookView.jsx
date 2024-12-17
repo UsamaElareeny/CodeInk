@@ -1,13 +1,23 @@
-import Book from "../Books/Book";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Book from "./Book";
 import GrokkingAlgoImg from "../../../public/GrokkingAlgoBook.png";
-import { useState } from "react";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+
 export default function BookView() {
-  const [Content, SetContent] = useState("");
+  const [content, setContent] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [book, setBook] = useState({});
+  
   const category = "Software Engineering";
   const description = "Grokking Algorithms";
   const shippingDelivery =
     "Books are delivered with a shipping company. Delivery duration is 2-4 working days";
+
+  const params = useParams();
+
   const handleIncrement = () => {
     if (quantity < 50) {
       setQuantity(quantity + 1);
@@ -19,13 +29,28 @@ export default function BookView() {
       setQuantity(quantity - 1);
     }
   };
+
+  useEffect(() => {
+    axios.get(`http://codeink.runasp.net/api/books/Published/${params.bookId}`)
+      .then((response) => {
+        console.log(response.data.data);
+        setBook(response.data?.data || {});
+      })
+      .catch((error) => {
+        console.error("Error fetching book:", error);
+        setBook({}); // Reset on error
+      });
+  }, []);
+
   return (
-    <section>
+    <>
+      <Header />
+      <section>
       <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-start justify-center gap-8 items-center">
         {/* Image Section */}
         <div className="md:w-2/6 md:h-auto flex-shrink-0 text-center">
           <img
-            src={GrokkingAlgoImg}
+            src={book.coverImageUrl}
             alt="Book Image"
             className="w-auto h-[480px] object-cover rounded-lg"
           />
@@ -33,9 +58,9 @@ export default function BookView() {
 
         {/* Text Section */}
         <div className="w-full md:w-7/10">
-          <h1 className="my-4 text-3xl font-extrabold">Grokking Algorithms</h1>
+          <h1 className="my-4 text-3xl font-extrabold">{book.title}</h1>
           <span className="block mb-4 text-mainColor text-xl font-bold">
-            1000 EGP
+            {book.price} EGP
           </span>
           <div className="mb-8 flex justify-center items-center">
             <form className="max-w-xs border border-gray-300 rounded-xl h-11">
@@ -54,9 +79,9 @@ export default function BookView() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M1 1h16"
                     />
                   </svg>
@@ -73,7 +98,7 @@ export default function BookView() {
                   className="rounded-xl p-3 h-full hover:opacity-70"
                 >
                   <svg
-                    class="w-3 h-3 text-gray-900"
+                    className="w-3 h-3 text-gray-900"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -81,9 +106,9 @@ export default function BookView() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M9 1v16M1 9h16"
                     />
                   </svg>
@@ -101,24 +126,24 @@ export default function BookView() {
           <div>
             <div className="text-md font-medium text-center border-b border-gray-200">
               <ul className="flex flex-wrap -mb-px">
+              <li>
+                <a
+                  href="#"
+                  className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
+                  onClick={() => {
+                    // Join category names with a comma
+                    const categoryNames = book.categories.map(category => category.name).join(", ");
+                    setContent(categoryNames); // Set the content to the joined category names
+                  }}
+                >
+                  Category
+                </a>
+              </li>
                 <li>
                   <a
                     href="#"
                     className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                    onClick={() => {
-                      SetContent(category);
-                    }}
-                  >
-                    Category
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                    onClick={() => {
-                      SetContent(description);
-                    }}
+                    onClick={() => setContent(book.description)}
                   >
                     Description
                   </a>
@@ -127,9 +152,7 @@ export default function BookView() {
                   <a
                     href="#"
                     className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                    onClick={() => {
-                      SetContent(shippingDelivery);
-                    }}
+                    onClick={() => setContent(shippingDelivery)}
                   >
                     Shipping & Delivery
                   </a>
@@ -137,40 +160,30 @@ export default function BookView() {
               </ul>
             </div>
           </div>
-          <div className="mt-8 font-light">{Content}</div>
+          <div className="mt-8 font-light">{content}</div>
         </div>
       </div>
 
       <div>
         <h1 className="font-extrabold text-lg mb-8">Related Products</h1>
         <div className="grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
-          <Book
+          {/* Replace these with real related books */}
+          {/* <Book
             title="Grooking Algorithms"
             price="1000"
-            ImgSource={GrokkingAlgoImg}
+            // ImgSource={GrokkingAlgoImg}
           />
           <Book
             title="Grooking Algorithms"
             price="1000"
-            ImgSource={GrokkingAlgoImg}
-          />
-          <Book
-            title="Grooking Algorithms"
-            price="1000"
-            ImgSource={GrokkingAlgoImg}
-          />
-          <Book
-            title="Grooking Algorithms"
-            price="1000"
-            ImgSource={GrokkingAlgoImg}
-          />
-          <Book
-            title="Grooking Algorithms"
-            price="1000"
-            ImgSource={GrokkingAlgoImg}
-          />
+            // ImgSource={GrokkingAlgoImg}
+          /> */}
         </div>
       </div>
     </section>
+    <Footer />
+
+    </>
+    
   );
 }

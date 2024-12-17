@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./book.css";
 
 export default function Book({ book }) {
@@ -7,9 +8,9 @@ export default function Book({ book }) {
   return (
     <div className="book">
       <div className="image">
-        <a href="#book">
+        <Link to={`/book/${book.id}`}>
           <img src={book.coverImageUrl} alt={`${book.title} book image`} />
-        </a>
+        </Link>
       </div>
       <div className={wishList ? "wishlist-button clicked" : "wishlist-button"}>
         <button onClick={() => setWishList(!wishList)}>

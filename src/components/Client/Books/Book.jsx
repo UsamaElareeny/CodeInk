@@ -8,7 +8,7 @@ export default function Book({ book }) {
   return (
     <div className="book">
       <div className="image">
-        <Link to={`/book/${book.id}`}>
+        <Link to={`book/${book.id}`}>
           <img src={book.coverImageUrl} alt={`${book.title} book image`} />
         </Link>
       </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Header from "../Header/Header.jsx";
-import Categories from "../Categories/Categories.jsx";
-import Books from "../Books/Books.jsx";
-import Footer from "../Footer/Footer.jsx";
+import Header from "../../../components/Client/Header/Header.jsx";
+import Categories from "../../../components/Client/Categories/Categories.jsx";
+import Books from "../../../components/Client/Books/Books.jsx";
+import Footer from "../../../components/Client/Footer/Footer.jsx";
 import axios from "axios";
 
 export default function Home() {
@@ -65,12 +65,10 @@ export default function Home() {
 
   return (
     <>
-      <Header />
       <section className="flex flex-col md:flex-row my-8">
         <Categories categories={categories} />
         <Books books={books} handleSortChange={handleSortChange} />
       </section>
-      <Footer />
     </>
   );
 }

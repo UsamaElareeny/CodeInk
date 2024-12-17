@@ -44,7 +44,6 @@ export default function BookView() {
 
   return (
     <>
-      <Header />
       <section>
         <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-start justify-center gap-8 items-center">
           {/* Image Section */}
@@ -183,7 +182,6 @@ export default function BookView() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

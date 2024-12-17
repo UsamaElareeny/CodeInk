@@ -1,5 +1,4 @@
 import Header from "./components/Header/Header.jsx";
-import WishList from "./components/WishList/WishList.jsx";
 import Categories from "./components/Categories/Categories.jsx";
 import Books from "./components/Books/Books.jsx";
 import Footer from "./components/Footer/Footer.jsx";

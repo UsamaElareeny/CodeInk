@@ -13,7 +13,7 @@
 
 .book:hover {
   transform: translateY(-10px);
-  height: 420px;
+  height: 440px;
 }
 
 .book:hover .cart-button {

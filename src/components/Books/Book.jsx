@@ -1,6 +1,6 @@
+import "./book.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./book.css";
 
 export default function Book({ book }) {
   const [wishList, setWishList] = useState(false);

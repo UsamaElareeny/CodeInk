@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Books from "../Books/Books";
-import Categories from "../Categories/Categories";
+import Header from "../Header/Header.jsx";
+import Categories from "../Categories/Categories.jsx";
+import Books from "../Books/Books.jsx";
+import Footer from "../Footer/Footer.jsx";
 import axios from "axios";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
 
 export default function Home() {
-  const [books, setBooks] = useState({items: []});
+  const [books, setBooks] = useState({ items: [] });
   const [categories, setCategories] = useState([]);
   const [sortOption, setSortOption] = useState("title");
 
@@ -65,14 +65,12 @@ export default function Home() {
 
   return (
     <>
-        <Header />
-        <section className="flex flex-col md:flex-row my-8 space-x-4">
-            <Categories categories={categories} />
-            <Books books={books} handleSortChange={handleSortChange} />
-        </section>
-        <Footer />
-
+      <Header />
+      <section className="flex flex-col md:flex-row my-8">
+        <Categories categories={categories} />
+        <Books books={books} handleSortChange={handleSortChange} />
+      </section>
+      <Footer />
     </>
   );
-  
 }

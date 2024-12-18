@@ -40,8 +40,9 @@ export const cartSlice = createSlice({
             const item = state.items.find((i) => i.id === id);
             if (item) {
                 item.quantity = quantity;
+                console.log(item.quantity)
                 if (increase) state.totalCost += item.price;
-                else state.totalCost -= item.price;
+                else if (item.quantity>0) state.totalCost -= item.price;
             }
             localStorage.setItem("cart", JSON.stringify(state.items))
             localStorage.setItem("totalCost", JSON.stringify(state.totalCost))

@@ -3,7 +3,7 @@ import { logout } from "../../../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginRegisterButton() {
-  const user = useSelector((state) => state.user.user)
+  const user = localStorage.getItem('jwt_token');
   const navigate=useNavigate()
   const dispatch = useDispatch()
   return (

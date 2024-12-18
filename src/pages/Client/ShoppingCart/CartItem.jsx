@@ -21,7 +21,7 @@ const CartItem = ({ item }) => {
             {/* Decrease Button */}
             <button
               className="bg-gray-200 px-3 py-1 rounded-l hover:bg-gray-300"
-              onClick={() => dispatch(updateQuantity({id:item.id, quantity: Math.max(0, item.quantity - 1), increase:false}))} // Prevent going below 1
+              onClick={() => dispatch(updateQuantity({id:item.id, quantity: Math.max(1, item.quantity - 1), increase:false}))} // Prevent going below 1
             >
               -
             </button>

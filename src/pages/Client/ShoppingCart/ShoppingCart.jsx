@@ -1,15 +1,29 @@
-import CartItems from "./CartItems.jsx";
+import React, { useState } from "react";
+import CartItem from "./CartItem";
 import OrderSummary from "./OrderSummary";
-export default function ShoppingCart() {
+import { useSelector } from "react-redux";
+
+const ShoppingCart = () => {
+  
+  const cart=useSelector((state)=>state.cart.items)
+
   return (
-    <section className="py-8 antialiased md:py-16">
-      <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <h2 className="text-xl font-semibold sm:text-2xl">Shopping Cart</h2>
-        <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
-          <CartItems />
-          <OrderSummary />
-        </div>
+    <div className="flex justify-between px-10 py-8 bg-gray-50 min-h-screen">
+      {/* Cart Items Section */}
+      <div className="w-3/5">
+        <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
+        {cart.map((item) => (
+          <CartItem
+            key={item.id}
+            item={item}
+          />
+        ))}
       </div>
-    </section>
+
+      {/* Order Summary Section */}
+      <OrderSummary />
+    </div>
   );
-}
+};
+
+export default ShoppingCart;

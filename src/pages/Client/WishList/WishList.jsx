@@ -1,5 +1,5 @@
-import Book from "../Books/Book.jsx";
-import bookImage from "../../../public/GrokkingAlgoBook.png";
+import Book from "../../../components/Client/Books/Book";
+import bookImage from "../../../assets/GrokkingAlgoBook.png";
 
 export default function WishList() {
   const Content = 1;
@@ -30,10 +30,12 @@ export default function WishList() {
                 {" "}
                 <i className="fa-solid fa-x mr-2"></i> Remove
               </button>
-              <Book
-                title="Grokking Algorithms"
-                price="149"
-                ImgSource={bookImage}
+              <Book book={{
+                id:5,
+                title:"Grokking Algorithms",
+                price:"149",
+                coverImageUrl:bookImage
+              }}
               />
             </div>
           </div>

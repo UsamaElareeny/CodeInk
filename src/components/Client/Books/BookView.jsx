@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Book from "./Book";
-import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
-
 export default function BookView() {
   const [content, setContent] = useState("");
   const [quantity, setQuantity] = useState(1);

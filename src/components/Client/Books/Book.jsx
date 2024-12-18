@@ -1,10 +1,13 @@
 import "./book.css";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { addItem } from "../../../redux/cartSlice";
 
 export default function Book({ book }) {
   const [wishList, setWishList] = useState(false);
-
+  const dispatch=useDispatch();
+  const items=useSelector((state)=>state.cart.items)
   return (
     <div className="book">
       <div className="image">
@@ -22,7 +25,11 @@ export default function Book({ book }) {
         <div className="price">${book.price} EGP</div>
       </div>
       <div className="cart-button">
-        <button>Add to Cart</button>
+        <button onClick={()=>{
+          dispatch(addItem(book))
+          console.log(items)
+
+        }}>Add to Cart</button>
       </div>
     </div>
   );

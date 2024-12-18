@@ -1,0 +1,72 @@
+/* General Styles */
+.container {
+    max-width: 600px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .tab {
+    padding: 10px 15px;
+    color: #888;
+    text-align: center;
+    flex-grow: 1;
+  }
+  
+  .activeTab {
+    border-bottom: 2px solid #ff5a3c;
+    color: #ff5a3c;
+    font-weight: bold;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .input,
+  .select {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .cardDetails {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .backButton,
+  .nextButton,
+  .submitButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .backButton {
+    background: #f5f5f5;
+  }
+  
+  .nextButton,
+  .submitButton {
+    background: #ff5a3c;
+    color: white;
+  }
+  

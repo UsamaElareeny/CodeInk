@@ -76,7 +76,7 @@ export const userSlice = createSlice({
             state.error = null;
             state.loading = false;
             state.message = '';
-            localStorage.clear();
+            localStorage.removeItem("jwt_token");
         },
     },
     extraReducers: (builder) => {
@@ -112,7 +112,7 @@ export const userSlice = createSlice({
                 console.log("From pending");
                 state.loading = true;
                 state.error = null;
-                localStorage.clear();
+                localStorage.removeItem("jwt_token");
             })
             .addCase(registerUser.fulfilled, (state, action) => {
                 console.log("From fulfilled");

@@ -15,7 +15,6 @@ export default function LoginRegister() {
   const user = useSelector((state) => state.user.user);
   const err = useSelector((state) => state.user.error);
   const message = useSelector((state) => state.user.message);
-  const loading = useSelector((state) => state.user.loading);
   const token = useSelector((state) => state.user.token);
 
   const navigate = useNavigate();

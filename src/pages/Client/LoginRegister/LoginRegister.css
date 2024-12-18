@@ -36,7 +36,8 @@
 .form-container h1 {
   letter-spacing: 0.3px;
 }
-form input {
+.sign-in input,
+.sign-up input {
   width: 100%;
   padding: 10px 20px;
   border: none;
@@ -54,21 +55,26 @@ form input {
   font-size: 12px;
   width: 100%;
 }
-.terms input[type="checkbox"] {
+.terms #terms {
   margin-right: 10px;
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   cursor: pointer;
   vertical-align: middle;
+  color: #ed9c4b;
+  border: none;
+  outline: none;
 }
 .terms label {
   cursor: pointer;
   line-height: 15px;
 }
-form a {
+.sign-in a,
+.sign-up a {
   text-decoration: none;
 }
-form .forget-password {
+.sign-in .forget-password,
+.sign-up .forget-password {
   color: #ed9c4b;
   text-decoration: none;
   font-size: 13px;
@@ -77,10 +83,13 @@ form .forget-password {
   align-self: flex-end;
   transition: all 0.4s ease-in-out;
 }
-form .forget-password:hover {
+.sign-in .forget-password:hover,
+.sign-up .forget-password:hover {
   opacity: 0.8;
 }
-button {
+.sign-up-button,
+.sign-in-button,
+.login-button {
   padding: 13px 25px;
   color: white;
   letter-spacing: 0.3px;
@@ -93,7 +102,9 @@ button {
   cursor: pointer;
   transition: all 0.4s ease-in-out;
 }
-button:hover {
+.sign-up-button:hover,
+.sign-in-button:hover,
+.login-button:hover {
   opacity: 0.8;
 }
 .sign-in {

@@ -8,13 +8,13 @@ const API_URL = 'http://codeink.runasp.net';
 
 // Fetch Books (Read)
 export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
-  // const token = localStorage.getItem('oauth_token'); // Retrieve OAuth token
+  const token = localStorage.getItem('jwt_token'); // Retrieve OAuth token
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'GET',
-    // headers: {
-    //   'Authorization': `Bearer ${token}`,
-    //   'Content-Type': 'application/json',
-    // },
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
   });
 
   if (!response.ok) {
@@ -27,7 +27,7 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
 
 // Create Book (Create)
 export const createBook = createAsyncThunk('books/createBook', async (bookData) => {
-  const token = localStorage.getItem('oauth_token'); // Retrieve OAuth token
+  const token = localStorage.getItem('jwt_token'); // Retrieve OAuth token
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'POST',
     headers: {
@@ -47,7 +47,7 @@ export const createBook = createAsyncThunk('books/createBook', async (bookData) 
 
 // Update Book (Update)
 export const updateBook = createAsyncThunk('books/updateBook', async (bookData) => {
-  const token = localStorage.getItem('oauth_token'); // Retrieve OAuth token
+  const token = localStorage.getItem('jwt_token'); // Retrieve OAuth token
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'PUT',
     headers: {
@@ -67,7 +67,7 @@ export const updateBook = createAsyncThunk('books/updateBook', async (bookData) 
 
 // Delete Book (Delete)
 export const deleteBook = createAsyncThunk('books/deleteBook', async (id) => {
-  const token = localStorage.getItem('oauth_token'); // Retrieve OAuth token
+  const token = localStorage.getItem('jwt_token'); // Retrieve OAuth token
   const response = await fetch(`${API_URL}/api/Books/${id}`, {
     method: 'DELETE',
     headers: {

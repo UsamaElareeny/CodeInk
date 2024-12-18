@@ -54,12 +54,12 @@ export default function Modal(props) {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Genre
+                                    isbn
                                 </label>
                                 <input
                                     type="text"
-                                    name="genre"
-                                    value={formData.genre || ""}
+                                    name="isbn"
+                                    value={formData.isbn || ""}
                                     onChange={handleChange}
                                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                                     required
@@ -72,7 +72,7 @@ export default function Modal(props) {
                                 <input
                                     type="number"
                                     name="publicationYear"
-                                    value={formData.publicationYear || ""}
+                                    value={formData.price || ""}
                                     onChange={handleChange}
                                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                                     required

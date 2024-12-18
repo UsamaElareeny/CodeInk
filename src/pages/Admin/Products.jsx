@@ -14,7 +14,7 @@ export default function Products() {
     }
   }, [dispatch, status]);
   console.log(books)
-  const columns = ["cover", "title", "author", "price", "isbn", "Status"]
+  const columns = ["cover", "title", "author", "isbn", "price", "Status"]
   // const [books, setBooks] = useState([
   //   {
   //     id: 1,
@@ -117,8 +117,8 @@ export default function Products() {
     setFormData({
       title: book.title,
       author: book.author,
-      genre: book.genre,
-      publicationYear: book.publicationYear,
+      isbn: book.isbn,
+      price: book.price,
       status: book.status,
       cover: book.cover,
     });
@@ -129,8 +129,8 @@ export default function Products() {
     setFormData({
       title: "",
       author: "",
-      genre: "",
-      publicationYear: "",
+      isbn: "",
+      Price: "",
       status: "Available",
       cover: "",
     });

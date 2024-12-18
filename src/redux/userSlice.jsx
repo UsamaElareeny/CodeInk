@@ -89,10 +89,10 @@ export const userSlice = createSlice({
                 console.log("From fulfilled");
                 const { data, email, password } = action.payload;
                 state.loading = false;
-                state.token = data.token;
-                state.message = data.message;
+                state.token = data.data.token;
+                state.message = data.errorMessage;
                 state.user = { email, password };
-                localStorage.setItem('oauth_token', data.token);
+                localStorage.setItem('jwt_token', data.data.token);
                 localStorage.setItem('user', JSON.stringify({ email, password }));
             })
             .addCase(loginUser.rejected, (state, action) => {

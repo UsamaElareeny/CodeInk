@@ -112,16 +112,17 @@ export default function Table(props) {
                 </td>
                 <td className="px-6 py-3 font-medium">{book.title}</td>
                 <td className="px-6 py-3">{book.author}</td>
-                <td className="px-6 py-3">{book.price}</td>
                 <td className="px-6 py-3">{book.isbn}</td>
+                <td className="px-6 py-3">{book.price}</td>
+                
                 <td className="px-6 py-3">
                   <span
-                    className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${book.status === "Available"
+                    className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${book.isPublished
                         ? "bg-green-100 text-green-600"
                         : "bg-red-100 text-red-600"
                       }`}
                   >
-                    {book.status}
+                    {book.isPublished?"Available":"Checked Out"}
                   </span>
                 </td>
                 <td

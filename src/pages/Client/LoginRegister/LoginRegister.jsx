@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./LoginRegister.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../../redux/userSlice";
+import { loginUser, registerUser } from "../../../redux/userSlice";
 import {jwtDecode} from 'jwt-decode';
 
 export default function LoginRegister() {
@@ -15,6 +15,7 @@ export default function LoginRegister() {
   const user = useSelector((state) => state.user.user);
   const err = useSelector((state) => state.user.error);
   const message = useSelector((state) => state.user.message);
+  const loading = useSelector((state) => state.user.loading);
   const token = useSelector((state) => state.user.token);
 
   const navigate = useNavigate();
@@ -22,13 +23,26 @@ export default function LoginRegister() {
   const handleSignIn = (event) => {
     event.preventDefault();
     dispatch(loginUser({ email: Username, password }));
-    event.target.reset()
+    setUsername('')
+    setPassword('')
   }
-  const handleSignUp = (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault();
-    dispatch(registerUser({ email, password, displayName: Name, Username }));
-    event.target.reset()
+    try {
+      await dispatch(registerUser({ 
+          email, 
+          password, 
+          displayName: Name, 
+          UserName: Username, 
+          C_password 
+      })).unwrap(); 
+  } catch (error) {
+      if(error.statusCode===200)
+        setIsActive(false);
+      
   }
+};
+
   // const parseJwt=(token) {
   //   var base64Url = token.split('.')[1];
   //   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -40,7 +54,7 @@ export default function LoginRegister() {
   // }
   useEffect(() => {
     if (user) {
-      if(jwtDecode(token).role="Admin") navigate("/admin");
+      if(jwtDecode(token).role=="Admin") navigate("/admin");
       else navigate("/client");
     }
   }, [user]);
@@ -95,7 +109,7 @@ export default function LoginRegister() {
         </div>
       </div>
 
-      {err && <h1 className="bg-red-500 p-5 text-cyan-50">{message}</h1>}
+      {message && err && <h1 className={`bg-red-500 p-3 mb-2 text-cyan-50 flex ${isActive?"justify-end":"justify-start"}`}>{message}</h1>}
     </div>
   );
 }

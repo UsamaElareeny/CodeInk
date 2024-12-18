@@ -35,13 +35,14 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
     'user/register',
-    async ({ email, password, displayName, userName }, { rejectWithValue }) => {
+    async ({ email, password, displayName, UserName ,C_password }, { rejectWithValue }) => {
         try {
+            if(C_password!==password) throw ({errorMessage:"Passwords do not match"});
             const response = await fetch(`${API_URL}/api/Account/Register`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    email, password, displayName, userName
+                    email, password, displayName, UserName
                 })
             });
 
@@ -50,7 +51,7 @@ export const registerUser = createAsyncThunk(
             if (response.status !== 201 || !response.ok) {
                 return rejectWithValue(data);
             } else {
-                return { data, email, password, name };
+                return { data, email, password, UserName };
             }
         } catch (error) {
             return rejectWithValue(error);
@@ -75,6 +76,7 @@ export const userSlice = createSlice({
             state.error = null;
             state.loading = false;
             state.message = '';
+            localStorage.clear();
         },
     },
     extraReducers: (builder) => {
@@ -93,7 +95,6 @@ export const userSlice = createSlice({
                 state.message = data.errorMessage;
                 state.user = { email, password };
                 localStorage.setItem('jwt_token', data.data.token);
-                localStorage.setItem('user', JSON.stringify({ email, password }));
             })
             .addCase(loginUser.rejected, (state, action) => {
                 console.log("From rejected");
@@ -116,10 +117,16 @@ export const userSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 console.log("From fulfilled");
                 console.log("From fulfilled", action.payload);
+                
             })
             .addCase(registerUser.rejected, (state, action) => {
                 console.log("From rejected");
                 console.log("From rejected", action.payload);
+                state.loading = false;
+                state.error = true
+                state.token = null;
+                state.user = null
+                state.message = action.payload.errorMessage;
             });
     }
 })

@@ -1,11 +1,14 @@
 import { MdMenuOpen } from "react-icons/md";
 import { CiLogout } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 export default function Sidebar({ open, setOpen, menuItems, setListObj }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <nav
       className={`fixed top-0 left-0 h-screen bg-gray-800 text-white shadow-md h-screen p-2 flex flex-col duration-500 bg-blue-600 text-white ${open ? "w-60" : "w-16"
@@ -57,7 +60,10 @@ export default function Sidebar({ open, setOpen, menuItems, setListObj }) {
       </ul>
 
       <li
-        onClick={() => {setListObj({ ...menuItems[4], current: true }); navigate("/");}}
+        onClick={() => {
+          setListObj({ ...menuItems[4], current: true }); 
+          dispatch(logout());
+          navigate('/'); }}
         className={
           'block rounded-md px-3 py-2 text-base font-medium'
           + "px-3 py-2 my-2 hover:bg-blue-800 rounded-md duration-300 cursor-pointer flex gap-2 items-center relative group"}            >

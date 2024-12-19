@@ -21,12 +21,12 @@ const CartItem = ({ item }) => {
             {/* Decrease Button */}
             <button
               className="bg-gray-200 px-3 py-1 rounded-l hover:bg-gray-300"
-              onClick={() => dispatch(updateQuantity({id:item.id, quantity: Math.max(1, item.quantity - 1), increase:false}))} // Prevent going below 1
+              onClick={() => dispatch(updateQuantity({id:item.id, quantity: Math.max(0, item.quantity - 1), increase:false}))} // Prevent going below 1
             >
               -
             </button>
             {/* Quantity */}
-            <span className="px-4 text-lg">{item.quantity}</span>
+            <span className="px-4 text-lg">{item.quantity||1}</span>
             {/* Increase Button */}
             <button
               className="bg-gray-200 px-3 py-1 rounded-r hover:bg-gray-300"

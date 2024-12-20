@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Checkout.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDeliveryOptions, setDeliveryOption } from "../../../redux/deliverySlice";
+import { fetchDeliveryOptions, setDeliveryID, setDeliveryOption } from "../../../redux/deliverySlice";
 import { addShippingCost } from "../../../redux/cartSlice";
 
 const StepDelivery = ({ nextStep, prevStep }) => {
   const dispatch = useDispatch();
-  const { deliveryOption, deliveryOptions, status } = useSelector((state) => state.delivery);
+  const { deliveryOption, deliveryOptions, status, id } = useSelector((state) => state.delivery);
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchDeliveryOptions());
@@ -14,6 +14,7 @@ const StepDelivery = ({ nextStep, prevStep }) => {
   }, [status, dispatch]);
   const handleChange = (e) => {
     dispatch(setDeliveryOption(e.target.value));
+    dispatch(setDeliveryID())
   };
 
   const handleSubmit = (e) => {
@@ -46,11 +47,9 @@ const StepDelivery = ({ nextStep, prevStep }) => {
           &lt; Back
         </button>
         <button type="submit" className={styles.nextButton} onClick={() => {
-          const selectedOption = deliveryOptions.findIndex(
-            (option) => option.shortName === deliveryOption
-          );
-          console.log(selectedOption)
-          dispatch(addShippingCost(deliveryOptions[selectedOption].price))
+          
+          console.log(id)
+          dispatch(addShippingCost(deliveryOptions[parseInt(id)-1].price))
         }}>
           Next &gt;
         </button>

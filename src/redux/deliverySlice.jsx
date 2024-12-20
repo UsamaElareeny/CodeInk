@@ -29,8 +29,13 @@ const deliverySlice = createSlice({
   reducers: {
     setDeliveryOption: (state, action) => {
       state.deliveryOption = action.payload;
+    },
+    setDeliveryID: (state, action) => {
+      const selectedOption = state.deliveryOptions.findIndex(
+        (option) => option.shortName === state.deliveryOption
+      );
+      state.id=selectedOption+1;
     }
-    
   },
   extraReducers: (builder) => {
     builder
@@ -48,5 +53,5 @@ const deliverySlice = createSlice({
   }
 });
 
-export const { setDeliveryOption } = deliverySlice.actions;
+export const { setDeliveryOption, setDeliveryID } = deliverySlice.actions;
 export default deliverySlice.reducer;

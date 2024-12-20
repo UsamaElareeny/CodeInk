@@ -13,7 +13,7 @@ export default function Products() {
     if (status === 'idle') {
       dispatch(fetchBooks());
     }
-  }, [dispatch, status]);
+  }, [dispatch, status]);  
 
   useEffect(() => {
     if (error) {

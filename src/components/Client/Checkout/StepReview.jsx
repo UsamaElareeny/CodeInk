@@ -1,8 +1,11 @@
 import React from "react";
 import styles from "./Checkout.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addShippingCost } from "../../../redux/cartSlice";
+
 
 const StepReview = ({ nextStep, prevStep }) => {
+    useDispatch(addShippingCost(JSON.parse(localStorage.getItem("shippingCost"))))
     const cartItems = useSelector((state) => state.cart.items)
     const shippingCost = useSelector((state) => state.cart.shippingCost) || 0;
     const totalCost = useSelector((state) => state.cart.totalCost) || 0;
@@ -38,7 +41,10 @@ const StepReview = ({ nextStep, prevStep }) => {
                 <button type="button" onClick={prevStep} className={styles.backButton}>
                     &lt; Back
                 </button>
-                <button type="button" onClick={nextStep} className={styles.nextButton}>
+                <button type="button" onClick={()=>{
+                    nextStep()
+                    
+                    }} className={styles.nextButton}>
                     Next &gt;
                 </button>
             </div>

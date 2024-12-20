@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addItem } from "../../../redux/cartSlice";
+import { addToWishlist, removeFromWishlist } from "../../../redux/wishListSlice";
 
 export default function Book({ book }) {
   const [wishList, setWishList] = useState(false);
+  // const itemsOfWishlist=useSelector((state)=>state.wishlist.items)
   const dispatch=useDispatch();
   const items=useSelector((state)=>state.cart.items)
   return (
@@ -16,7 +18,11 @@ export default function Book({ book }) {
         </Link>
       </div>
       <div className={wishList ? "wishlist-button clicked" : "wishlist-button"}>
-        <button onClick={() => setWishList(!wishList)}>
+        <button onClick={() => {
+          setWishList(!wishList);
+          if(!wishList) dispatch(addToWishlist(book));
+          else dispatch(removeFromWishlist(book.id));
+        }}>
           <i className="fa-regular fa-heart"></i>
         </button>
       </div>

@@ -117,21 +117,19 @@ export default function Modal(props) {
                                         onClick={() =>
                                             setFormData({
                                                 ...formData,
-                                                status:
-                                                    formData.status === "Available"
-                                                        ? "Checked Out"
-                                                        : "Available",
+                                                isPublished:
+                                                    !formData.isPublished
                                             })
                                         }
                                         className={`relative w-10 h-6 rounded-full shadow-inner transition ${
-                                            formData.status === "Available"
+                                            formData.isPublished
                                                 ? "bg-green-500"
                                                 : "bg-gray-300"
                                         }`}
                                     >
                                         <span
                                             className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transform transition ${
-                                                formData.status === "Available" ? "translate-x-4" : ""
+                                                formData.isPublished ? "translate-x-4" : ""
                                             }`}
                                         ></span>
                                     </button>

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Modal from '../../components/Admin/Modal';
 import Notification from '../../components/Admin/Notification';
 import Table from '../../components/Admin/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBook, deleteBook, fetchBooks, updateBook } from '../../redux/booksSlice';
+import { Form } from 'react-router-dom';
 
 export default function Products() {
   const dispatch = useDispatch();
@@ -13,114 +14,28 @@ export default function Products() {
       dispatch(fetchBooks());
     }
   }, [dispatch, status]);
-  console.log(books)
-  const columns = ["cover", "title", "author", "isbn", "price", "Status"]
-  // const [books, setBooks] = useState([
-  //   {
-  //     id: 1,
-  //     title: "The Great Gatsby",
-  //     author: "F. Scott Fitzgerald",
-  //     genre: "Classic",
-  //     publicationYear: 1925,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=G",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "To Kill a Mockingbird",
-  //     author: "Harper Lee",
-  //     genre: "Historical Fiction",
-  //     publicationYear: 1960,
-  //     status: "Checked Out",
-  //     cover: "https://via.placeholder.com/40?text=T",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 7,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 8,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 9,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  //   {
-  //     id: 10,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     genre: "Dystopian",
-  //     publicationYear: 1949,
-  //     status: "Available",
-  //     cover: "https://via.placeholder.com/40?text=1",
-  //   },
-  // ]);
 
+  useEffect(() => {
+    if (error) {
+      console.error('Failed to fetch books:', error);
+    }
+  }, [error]);
+
+  const columns = ["cover", "title", "author", "isbn", "price", "status"];
   const [selectedBook, setSelectedBook] = useState(null);
   const [formData, setFormData] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
 
   const handleEdit = (book) => {
     setSelectedBook(book);
+    // console.log(book)
     setFormData({
       title: book.title,
       author: book.author,
       isbn: book.isbn,
       price: book.price,
-      status: book.status,
-      cover: book.cover,
+      isPublished: book.isPublished,
+      cover: book.coverImageUrl,
     });
   };
 
@@ -130,8 +45,8 @@ export default function Products() {
       title: "",
       author: "",
       isbn: "",
-      Price: "",
-      status: "Available",
+      price: "",
+      isPublished: true,
       cover: "",
     });
   };
@@ -142,39 +57,82 @@ export default function Products() {
   };
 
   const handleDelete = (id) => {
-    // Confirm deletion (optional)
     const confirmDelete = window.confirm("Are you sure you want to delete this item?");
     if (confirmDelete) {
-      const updatedData = books.filter((book) => book.id !== id);
-      setBooks(updatedData);
+      dispatch(deleteBook(id));
       setSelectedBook(null);
       setFormData(null);
     }
-
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-
+  
     if (selectedBook) {
-      setBooks((prevBooks) =>
-        prevBooks.map((book) =>
-          book.id === selectedBook.id ? { ...book, ...formData } : book
-        )
-      );
+      console.log("Selected Book:", selectedBook);
+  
+      // Create FormData for updating the book
+      const formdata = new FormData();
+      formdata.append("id", selectedBook.id);
+      formdata.append("description", formData.description || selectedBook.description);
+      formdata.append("categoryIds[0]", selectedBook.categories?.[0]?.id || ""); // Check if the category exists
+      formdata.append("Title", formData.title || selectedBook.title); // Ensure proper casing
+      formdata.append("Author", formData.author || selectedBook.author); // Ensure proper casing
+      formdata.append("ISBN", formData.isbn || selectedBook.isbn);
+      formdata.append("price", parseFloat(formData.price || selectedBook.price)); // Ensure it's a number
+      formdata.append("isPublished", formData.isPublished === "true" || formData.isPublished); // Convert to boolean if needed
+  
+      // Handle file input for the CoverImage field
+      if (formData.cover && formData.cover instanceof File) {
+        formdata.append("CoverImage", formData.cover); // If coverImage is a valid file object
+      } else {
+        console.warn("Invalid CoverImage: Using placeholder or existing image.");
+        formdata.append(
+          "CoverImage",
+          new File(["dummy content"], "placeholder.png", { type: "image/png" })
+        );
+      }
+  
+      // Dispatch the updated form data
+      dispatch(updateBook(formdata))
+        .unwrap()
+        .then(() => {
+          alert("Book updated successfully!");
+        })
+        .catch((error) => {
+          console.error("Update failed:", error.message || error);
+          alert("Error updating the book. Please check your input.");
+        });
     } else {
-      const newBook = {
-        id: books.length + 1,
+      // Create a new book
+      const newBookData = {
         ...formData,
-        cover: `https://via.placeholder.com/40?text=${formData.title[0]}`
+        cover: formData.cover
+          ? formData.cover.name // Assuming it's a File object, get its name
+          : `https://via.placeholder.com/40?text=${formData.title[0]}`,
       };
-      setBooks((prevBooks) => [...prevBooks, newBook]);
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 3000);
+  
+      dispatch(createBook(newBookData))
+        .unwrap()
+        .then(() => {
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+        })
+        .catch((error) => {
+          console.error("Create failed:", error.message || error);
+          alert("Error creating the book. Please try again.");
+        });
     }
+  
+    // Reset selectedBook and formData
     setSelectedBook(null);
     setFormData(null);
   };
+  
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -182,7 +140,7 @@ export default function Products() {
         <div>
           <h2 className="text-lg font-bold text-gray-800">Books</h2>
           <p className="text-sm text-gray-500 px-2">
-            A list of all the books in the library including their title, author, genre, and status.
+            A list of all the books in the library including their title, author, price, and status.
           </p>
         </div>
         <button onClick={handleAdd} className="min-w-[105px] bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">

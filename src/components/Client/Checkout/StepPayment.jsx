@@ -69,13 +69,13 @@ const PaymentForm = ({ prevStep }) => {
   return (
     <form onSubmit={handlePayment} className={styles.form}>
       <h3>Payment Information</h3>
-      <CardElement className={styles.cardElement} />
+      <CardElement className={styles.cardElement+" py-3 m-5"} />
       <div className={styles.buttonGroup}>
         <button type="button" onClick={prevStep} className={styles.backButton}>
           &lt; Back
         </button>
         <button type="submit" className={styles.submitButton} disabled={isProcessing}>
-          {isProcessing ? "Processing..." : "Submit Order &gt;"}
+          {isProcessing ? "Processing..." : "Submit Order "}
         </button>
       </div>
       {errorStripe && <p className="text-red-500 mt-4">Error: {errorStripe}</p>}

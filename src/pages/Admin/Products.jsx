@@ -67,68 +67,32 @@ export default function Products() {
 
   const handleSave = (e) => {
     e.preventDefault();
-  
+
     if (selectedBook) {
-      console.log("Selected Book:", selectedBook);
-  
-      // Create FormData for updating the book
+      console.log(selectedBook)
       const formdata = new FormData();
-      formdata.append("id", selectedBook.id);
-      formdata.append("description", formData.description || selectedBook.description);
-      formdata.append("categoryIds[0]", selectedBook.categories?.[0]?.id || ""); // Check if the category exists
-      formdata.append("Title", formData.title || selectedBook.title); // Ensure proper casing
-      formdata.append("Author", formData.author || selectedBook.author); // Ensure proper casing
-      formdata.append("ISBN", formData.isbn || selectedBook.isbn);
-      formdata.append("price", parseFloat(formData.price || selectedBook.price)); // Ensure it's a number
-      formdata.append("isPublished", formData.isPublished === "true" || formData.isPublished); // Convert to boolean if needed
-  
-      // Handle file input for the CoverImage field
-      if (formData.cover && formData.cover instanceof File) {
-        formdata.append("CoverImage", formData.cover); // If coverImage is a valid file object
-      } else {
-        console.warn("Invalid CoverImage: Using placeholder or existing image.");
-        formdata.append(
-          "CoverImage",
-          new File(["dummy content"], "placeholder.png", { type: "image/png" })
-        );
-      }
-  
-      // Dispatch the updated form data
-      dispatch(updateBook(formdata))
-        .unwrap()
-        .then(() => {
-          alert("Book updated successfully!");
-        })
-        .catch((error) => {
-          console.error("Update failed:", error.message || error);
-          alert("Error updating the book. Please check your input.");
-        });
+      formdata.append('id', selectedBook.id);
+      formdata.append("description",selectedBook.description)
+      formdata.append("categoryIds[0]", selectedBook.categories[0].id);
+      formdata.append('title', formData.title);
+      formdata.append('author', formData.author);
+      formdata.append('isbn', formData.isbn);
+      formdata.append('price', formData.price);
+      formdata.append('isPublished', formData.isPublished);
+      const coverImageFile = new File(["dummy content"], formData.cover, {
+        type: "image/png",
+      });
+      formdata.append("CoverImage", coverImageFile);
+
+      dispatch(updateBook(formdata));
     } else {
-      // Create a new book
-      const newBookData = {
-        ...formData,
-        cover: formData.cover
-          ? formData.cover.name // Assuming it's a File object, get its name
-          : `https://via.placeholder.com/40?text=${formData.title[0]}`,
-      };
-  
-      dispatch(createBook(newBookData))
-        .unwrap()
-        .then(() => {
-          setShowNotification(true);
-          setTimeout(() => setShowNotification(false), 3000);
-        })
-        .catch((error) => {
-          console.error("Create failed:", error.message || error);
-          alert("Error creating the book. Please try again.");
-        });
+      dispatch(createBook({ ...formData, cover: `https://via.placeholder.com/40?text=${formData.title[0]}` }));
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
     }
-  
-    // Reset selectedBook and formData
     setSelectedBook(null);
     setFormData(null);
   };
-  
 
   if (status === 'loading') {
     return <div>Loading...</div>;

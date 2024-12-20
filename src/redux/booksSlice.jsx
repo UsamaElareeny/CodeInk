@@ -50,8 +50,7 @@ export const updateBook = createAsyncThunk('books/updateBook', async (updatedBoo
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: updatedBook,
   });
@@ -61,7 +60,7 @@ export const updateBook = createAsyncThunk('books/updateBook', async (updatedBoo
   }
 
   const data = await response.json();
-  return data.data; // Return the updated book data
+  return data; // Return the updated book data
 });
 
 // Delete Book

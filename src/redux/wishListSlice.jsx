@@ -10,10 +10,13 @@ const wishListSlice = createSlice({
   initialState,
   reducers: {
     addToWishlist: (state, action) => {
-      state.items.push({...action.payload,isAction:true});
-      state.wishlistSize = state.items.length;
-      localStorage.setItem('wishlist', JSON.stringify(state.items));
-      localStorage.setItem('wishlistSize', JSON.stringify(state.wishlistSize));
+      const filteredBook = state.items.find(book => book.id === action.payload.id);
+      if(!filteredBook){
+        state.items.push({...action.payload,isAction:true});
+        state.wishlistSize = state.items.length; 
+        localStorage.setItem('wishlist', JSON.stringify(state.items));
+        localStorage.setItem('wishlistSize', JSON.stringify(state.wishlistSize));
+      }
     },
     removeFromWishlist: (state, action) => {
       const deletedBook = state.items.find(book => book.id === action.payload); 

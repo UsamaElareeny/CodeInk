@@ -47,9 +47,7 @@ const StepDelivery = ({ nextStep, prevStep }) => {
           &lt; Back
         </button>
         <button type="submit" className={styles.nextButton} onClick={() => {
-          
-          console.log(id)
-          dispatch(addShippingCost(deliveryOptions[parseInt(id)-1].price))
+          dispatch(addShippingCost(deliveryOptions[id-1].price))
         }}>
           Next &gt;
         </button>

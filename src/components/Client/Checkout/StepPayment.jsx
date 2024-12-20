@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { updatePaymentDetails, processPayment, clearPaymentDetails } from '../../../redux/paymentSlice';
 import styles from "./Checkout.module.css"
+import { clearOrderState, createOrder } from '../../../redux/orderSlice';
 const StepPayment = ({prevStep}) => {
   const dispatch = useDispatch();
-  const { paymentDetails, loading, error, success } = useSelector((state) => state.payment);
+  const { paymentDetails,addressDetails} = useSelector((state) => state.payment);
+  const { loading, error, success } = useSelector((state) => state.order);
+  const {paymentIntentId,clientSecret,deliveryMethodId,cartItems}=localStorage.getItem("payment")?JSON.parse(localStorage.getItem("payment")):{paymentIntentId:"",clientSecret:"",deliveryMethodId:"",cartItems:[]};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -12,7 +15,7 @@ const StepPayment = ({prevStep}) => {
 
   const handlePayment = (e) => {
     e.preventDefault();
-    dispatch(processPayment(paymentDetails));
+    dispatch(createOrder({paymentIntentId,clientSecret,shippingAddress:addressDetails,deliveryMethodId,cartItems}));
   };
   return (
     <form onSubmit={handlePayment} className={styles.form}>
@@ -71,7 +74,10 @@ const StepPayment = ({prevStep}) => {
       {error && <p className="text-red-500 mt-4">Error: {error}</p>}
       {success && <p className="text-green-500 mt-4">Payment processed successfully!</p>}
       <button
-        onClick={() => dispatch(clearPaymentDetails())}
+        onClick={() => {
+          dispatch(clearPaymentDetails())
+          dispatch(clearOrderState())
+        }}
         className="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Clear Payment Details

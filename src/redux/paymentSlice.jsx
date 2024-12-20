@@ -25,12 +25,16 @@ const initialState = {
 export const processPayment = createAsyncThunk(
     'payment/processPayment',
     async (paymentData, { rejectWithValue }) => {
+        const token = localStorage.getItem('jwt_token');
         try {
             const response = await axios.post(
                 'http://codeink.runasp.net/api/Payments',
                 paymentData,
                 {
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json' 
+                    },
                 }
             );
             return response.data; // Return data if successful
@@ -80,9 +84,10 @@ const paymentSlice = createSlice({
                 state.error = null;
                 state.success = false;
             })
-            .addCase(processPayment.fulfilled, (state) => {
+            .addCase(processPayment.fulfilled, (state,action) => {
                 state.loading = false;
                 state.success = true;
+                localStorage.setItem('payment', JSON.stringify(action.payload.data));
             })
             .addCase(processPayment.rejected, (state, action) => {
                 state.loading = false;

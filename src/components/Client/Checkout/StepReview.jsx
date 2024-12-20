@@ -2,13 +2,16 @@ import React from "react";
 import styles from "./Checkout.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addShippingCost } from "../../../redux/cartSlice";
+import { processPayment } from "../../../redux/paymentSlice";
 
 
 const StepReview = ({ nextStep, prevStep }) => {
-    useDispatch(addShippingCost(JSON.parse(localStorage.getItem("shippingCost"))))
+    const dispatch = useDispatch();
+    dispatch(addShippingCost(JSON.parse(localStorage.getItem("shippingCost"))))
     const cartItems = useSelector((state) => state.cart.items)
     const shippingCost = useSelector((state) => state.cart.shippingCost) || 0;
     const totalCost = useSelector((state) => state.cart.totalCost) || 0;
+    const id = useSelector((state) => state.delivery.id) ;
 
     return (
         <div className={styles.form}>
@@ -42,8 +45,9 @@ const StepReview = ({ nextStep, prevStep }) => {
                     &lt; Back
                 </button>
                 <button type="button" onClick={()=>{
-                    nextStep()
                     
+                    dispatch(processPayment({deliveryMethodId:id, cartItems:cartItems.map(({ name: bookTitle,id:bookId, ...rest }) => ({ ...rest, bookId, bookTitle }))}))
+                    nextStep()
                     }} className={styles.nextButton}>
                     Next &gt;
                 </button>

@@ -8,7 +8,9 @@ import axios from "axios";
 export default function Home() {
   const [books, setBooks] = useState({ items: [] });
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortOption, setSortOption] = useState("title");
+  
 
   // Fetch books with sorting option
   const fetchBooks = (sortBy) => {
@@ -25,6 +27,10 @@ export default function Home() {
       default:
         endpoint += "?orderBy=title";
         break;
+    }
+
+    if(selectedCategory!=null){
+      endpoint += `&categoryId=${selectedCategory}`;
     }
 
     axios
@@ -56,7 +62,7 @@ export default function Home() {
   useEffect(() => {
     fetchBooks(sortOption); // Fetch books when sortOption changes
     handleFetchCategories(); // Fetch categories
-  }, [sortOption]);
+  }, [sortOption,selectedCategory]);
 
   // Handle sort change
   const handleSortChange = (e) => {
@@ -66,7 +72,7 @@ export default function Home() {
   return (
     <>
       <section className="flex flex-col md:flex-row my-8">
-        <Categories categories={categories} />
+        <Categories categories={categories} setSelectedCategory={setSelectedCategory} />
         <Books books={books} handleSortChange={handleSortChange} />
       </section>
     </>

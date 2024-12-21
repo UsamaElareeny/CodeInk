@@ -27,17 +27,19 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
 // Create Book
 export const createBook = createAsyncThunk('books/createBook', async (newBook) => {
   const token = localStorage.getItem('jwt_token');
+  const isFormData = newBook instanceof FormData;
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newBook),
+    headers: isFormData
+      ? { 'Authorization': `Bearer ${token}` }
+      : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: isFormData ? newBook : JSON.stringify(newBook),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to create book');
+    const errorData = await response.json();
+    console.error('Error response:', errorData); // Log error response
+    throw new Error(errorData.message || 'Failed to create book');
   }
 
   const data = await response.json();
@@ -45,23 +47,26 @@ export const createBook = createAsyncThunk('books/createBook', async (newBook) =
 });
 
 // Update Book
-export const updateBook = createAsyncThunk('books/updateBook', async (updatedBook ) => {
+export const updateBook = createAsyncThunk('books/updateBook', async (updatedBook) => {
   const token = localStorage.getItem('jwt_token');
+  const isFormData = updatedBook instanceof FormData; 
   const response = await fetch(`${API_URL}/api/books`, {
     method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-    body: updatedBook,
+    headers: isFormData
+      ? { 'Authorization': `Bearer ${token}` }
+      : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: isFormData ? updatedBook : JSON.stringify(updatedBook),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to update book');
+    const errorData = await response.json();
+    console.error('Error response:', errorData); // Log error response
+    throw new Error(errorData.message || 'Failed to update book');
   }
 
-  const data = await response.json();
-  return data; // Return the updated book data
+  return await response.json();
 });
+
 
 // Delete Book
 export const deleteBook = createAsyncThunk('books/deleteBook', async (id) => {
@@ -117,7 +122,7 @@ const booksSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(updateBook.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = 'idle';
         const index = state.books.findIndex(book => book.id === action.payload.id);
         if (index !== -1) {
           state.books[index] = action.payload;

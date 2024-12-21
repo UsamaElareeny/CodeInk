@@ -4,7 +4,6 @@ import Notification from '../../components/Admin/Notification';
 import Table from '../../components/Admin/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBook, deleteBook, fetchBooks, updateBook } from '../../redux/booksSlice';
-import { Form } from 'react-router-dom';
 
 export default function Products() {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ export default function Products() {
     if (status === 'idle') {
       dispatch(fetchBooks());
     }
-  }, [dispatch, status]);  
+  }, [dispatch, status]);
 
   useEffect(() => {
     if (error) {
@@ -64,36 +63,82 @@ export default function Products() {
       setFormData(null);
     }
   };
+  const base64ToBlob = (base64String, mimeType) => {
+    const byteString = atob(base64String.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([uint8Array], { type: mimeType });
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
-
+  
+    const formdata = new FormData();
+    formdata.append('title', formData.title);
+    formdata.append('author', formData.author);
+    formdata.append('isbn', formData.isbn);
+    formdata.append('price', formData.price);
+    formdata.append('isPublished', formData.isPublished);
+  
+    if (formData.cover) {
+      const base64Parts = formData.cover.split(",");
+      if (base64Parts.length === 2) {
+        const mimeType = base64Parts[0].match(/:(.*?);/)[1];
+        if (mimeType) {
+          const blob = base64ToBlob(formData.cover, mimeType);
+  
+          const coverImageFile = new File([blob], "coverImage", {
+            type: blob.type,
+          });
+  
+          // Check file size (example: limit to 2MB)
+          if (coverImageFile.size > 2 * 1024 * 1024) {
+            alert("File size exceeds the 2MB limit.");
+            return;
+          }
+  
+          // Check file type
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+          if (!allowedTypes.includes(coverImageFile.type)) {
+            alert("File type is not allowed. Allowed types are: .jpg, .jpeg, .png, .gif.");
+            return;
+          }
+  
+          formdata.append("CoverImage", coverImageFile);
+        } else {
+          alert("Invalid cover image format.");
+          return;
+        }
+      } else {
+        alert("Invalid cover image format.");
+        return;
+      }
+    } else {
+      alert("Cover image is required.");
+      return;
+    }
+  
     if (selectedBook) {
-      console.log(selectedBook)
-      const formdata = new FormData();
       formdata.append('id', selectedBook.id);
-      formdata.append("description",selectedBook.description)
+      formdata.append("description", selectedBook.description);
       formdata.append("categoryIds[0]", selectedBook.categories[0].id);
-      formdata.append('title', formData.title);
-      formdata.append('author', formData.author);
-      formdata.append('isbn', formData.isbn);
-      formdata.append('price', formData.price);
-      formdata.append('isPublished', formData.isPublished);
-      const coverImageFile = new File(["dummy content"], formData.cover, {
-        type: "image/png",
-      });
-      formdata.append("CoverImage", coverImageFile);
-
       dispatch(updateBook(formdata));
     } else {
-      dispatch(createBook({ ...formData, cover: `https://via.placeholder.com/40?text=${formData.title[0]}` }));
+      formdata.append("categoryIds[0]", "1");
+      dispatch(createBook(formdata));
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
     }
+  
     setSelectedBook(null);
     setFormData(null);
   };
-
+  
   if (status === 'loading') {
     return <div>Loading...</div>;
   }

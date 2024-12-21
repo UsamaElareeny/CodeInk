@@ -35,20 +35,23 @@ export default function Book({ book }) {
       {/* Book info section */}
       <div className="book-info">
         <div className="title">{book.title}</div>
-        <div className="price">${book.price} EGP</div>
+        <div className="flex justify-between flex-col">
+          <div className="price">${book.price} EGP</div>
+          
+          <div className="cart-button">
+            <button
+              onClick={() => {
+                dispatch(addItem(book));
+              }}
+            >
+              Add to Cart
+            </button>
+          </div>
+
+        </div>
       </div>
 
-      {/* Add to Cart button */}
-      <div className="cart-button">
-        <button
-          onClick={() => {
-            dispatch(addItem(book));
-            console.log(items);
-          }}
-        >
-          Add to Cart
-        </button>
-      </div>
+      
     </div>
   );
 }

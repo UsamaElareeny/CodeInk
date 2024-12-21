@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import Book from "./Book";
 
 export default function BookView() {
   const [content, setContent] = useState(""); // Content for tabs
@@ -145,23 +146,7 @@ export default function BookView() {
         {relatedBooks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
              {relatedBooks.map((relatedBook) => (
-              <Link
-                key={relatedBook.id}
-                to={`/client/book/${relatedBook.id}`} // Navigate to BookView page for each related book
-                className="border rounded-lg p-4"
-              >
-                <img
-                  src={relatedBook.coverImageUrl || "https://via.placeholder.com/150"}
-                  alt={relatedBook.title}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-                <h3 className="text-lg font-semibold mt-2 text-center">
-                  {relatedBook.title}
-                </h3>
-                <p className="text-mainColor font-bold text-center">
-                  {relatedBook.price || 0} EGP
-                </p>
-              </Link>
+              <Book book={relatedBook} />
             ))}
           </div>
         ) : (

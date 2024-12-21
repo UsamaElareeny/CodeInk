@@ -1,3 +1,5 @@
+import Sidebar from "./src/components/Admin/SideBar.jsx";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -23,6 +25,7 @@ export default {
         mainColor: "#ED9C4B",
         buttonBgColor: "#EEEDEA",
         buttonBgColorHover: "#D0C9C0",
+        Sidebar: "#f6b435",
       },
       fontFamily: {
         mainFont: ["Urbanist", "Arial", "Helvetica", "sans-serif"], // Set Urbanist as default sans
@@ -30,5 +33,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

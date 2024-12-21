@@ -21,7 +21,7 @@ export default function Home() {
         </div>
         <div className="section cursor-pointer transform transition-transform hover:scale-110" onClick={() => handleSectionClick('users')}>
           <img src="https://via.placeholder.com/100" alt="Manage Users" className="w-24 h-24 mx-auto" />
-          <p className="mt-2 font-semibold">Manage Users</p>
+          <p className="mt-2 font-semibold">Manage Categories</p>
         </div>
       </div>
       

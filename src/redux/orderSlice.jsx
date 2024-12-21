@@ -23,6 +23,15 @@ export const createOrder = createAsyncThunk(
     }
   }
 );
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
+  const token = localStorage.getItem('jwt_token'); // Retrieve the token from local storage
+  const response = await axios.get('http://codeink.runasp.net/api/Orders/all', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return response.data.data.items;
+});
 
 const orderSlice = createSlice({
   name: "order",
@@ -31,6 +40,8 @@ const orderSlice = createSlice({
     loading: false,
     error: null,
     success: false,
+    orders: [],
+    status: 'idle',
   },
   reducers: {
     clearOrderState: (state) => {
@@ -56,6 +67,17 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(fetchOrders.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.orders = action.payload;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });

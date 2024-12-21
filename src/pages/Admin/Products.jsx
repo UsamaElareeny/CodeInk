@@ -75,6 +75,73 @@ export default function Products() {
     return new Blob([uint8Array], { type: mimeType });
   };
 
+  // const handleSave = (e) => {
+  //   e.preventDefault();
+  
+  //   const formdata = new FormData();
+  //   formdata.append('title', formData.title);
+  //   formdata.append('author', formData.author);
+  //   formdata.append('isbn', formData.isbn);
+  //   formdata.append('price', formData.price);
+  //   formdata.append('isPublished', formData.isPublished);
+  
+  //   if (formData.cover) {
+  //     const base64Parts = formData.cover.split(",");
+  //     if (base64Parts.length === 2) {
+  //       const mimeType = base64Parts[0].match(/:(.*?);/)[1];
+  //       if (mimeType) {
+  //         const blob = base64ToBlob(formData.cover, mimeType);
+  
+  //         const extensionMap = {
+  //           "image/jpeg": ".jpg",
+  //           "image/png": ".png",
+  //           "image/gif": ".gif",
+  //         };
+
+  //         const fileExtension = extensionMap[mimeType] || "";
+
+  //         const coverImageFile = new File([blob], `coverImage${fileExtension}`, {
+  //           type: blob.type,
+  //         });
+  
+  //         // Check file size (example: limit to 2MB)
+  //         if (coverImageFile.size > 2 * 1024 * 1024) {
+  //           alert("File size exceeds the 2MB limit.");
+  //           return;
+  //         }
+  
+  //         // Check file type
+  //         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  //         if (!allowedTypes.includes(coverImageFile.type)) {
+  //           alert("File type is not allowed. Allowed types are: .jpg, .jpeg, .png, .gif.");
+  //           return;
+  //         }
+  
+  //         console.log(coverImageFile.type);
+  //         formdata.append("CoverImage", coverImageFile);
+  //       } else {
+  //         alert("Invalid cover image format.");
+  //         return;
+  //       }
+  //     }
+  //   }
+  
+  //   if (selectedBook) {
+  //     formdata.append('id', selectedBook.id);
+  //     formdata.append("description", selectedBook.description);
+  //     formdata.append("categoryIds[0]", "1");
+  //     dispatch(updateBook(formdata));
+  //   } else {
+  //     formdata.append("categoryIds[0]", "1");
+  //     dispatch(createBook(formdata));
+  //     setShowNotification(true);
+  //     setTimeout(() => setShowNotification(false), 3000);
+  //   }
+  
+  //   setSelectedBook(null);
+  //   setFormData(null);
+  // };
+
   const handleSave = (e) => {
     e.preventDefault();
   
@@ -92,7 +159,15 @@ export default function Products() {
         if (mimeType) {
           const blob = base64ToBlob(formData.cover, mimeType);
   
-          const coverImageFile = new File([blob], "coverImage", {
+          const extensionMap = {
+            "image/jpeg": ".jpg",
+            "image/png": ".png",
+            "image/gif": ".gif",
+          };
+  
+          const fileExtension = extensionMap[mimeType] || "";
+  
+          const coverImageFile = new File([blob], `coverImage${fileExtension}`, {
             type: blob.type,
           });
   
@@ -114,19 +189,13 @@ export default function Products() {
           alert("Invalid cover image format.");
           return;
         }
-      } else {
-        alert("Invalid cover image format.");
-        return;
       }
-    } else {
-      alert("Cover image is required.");
-      return;
     }
   
     if (selectedBook) {
       formdata.append('id', selectedBook.id);
       formdata.append("description", selectedBook.description);
-      formdata.append("categoryIds[0]", selectedBook.categories[0].id);
+      formdata.append("categoryIds[0]", "1");
       dispatch(updateBook(formdata));
     } else {
       formdata.append("categoryIds[0]", "1");
@@ -138,6 +207,7 @@ export default function Products() {
     setSelectedBook(null);
     setFormData(null);
   };
+  
   
   if (status === 'loading') {
     return <div>Loading...</div>;

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromWishlist } from '../../../redux/wishListSlice';
 import Book from '../../../components/Client/Books/Book';
+import { Link } from 'react-router-dom';
 // import bookImage from '../../../assets/GrokkingAlgoBook.png';
 
 export default function WishList() {
@@ -38,7 +39,7 @@ export default function WishList() {
                 >
                   <i className="fa-solid fa-x mr-2"></i> Remove
                 </button>
-                <Book book={book} />
+                  <Book book={book}/>
               </div>
             ))}
           </div>

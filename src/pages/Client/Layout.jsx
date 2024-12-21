@@ -5,10 +5,12 @@ import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
-    <>
-    <Header />
-        <Outlet />
-    <Footer />
-    </>
+    <div className='flex-1 flex-col  '>
+      <div className="container flex-grow mb-4 min-h-screen">
+      <Header />
+          <Outlet />
+      </div>
+      <Footer />
+    </div>
   )
 }

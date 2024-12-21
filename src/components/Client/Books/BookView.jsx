@@ -1,183 +1,173 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+
 export default function BookView() {
-  const [content, setContent] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [book, setBook] = useState({});
-
-  const category = "Software Engineering";
-  const description = "Grokking Algorithms";
-  const shippingDelivery =
-    "Books are delivered with a shipping company. Delivery duration is 2-4 working days";
-
+  const [content, setContent] = useState(""); // Content for tabs
+  const [quantity, setQuantity] = useState(1); // Quantity for cart
+  const [book, setBook] = useState(null); // Current book data
+  const [relatedBooks, setRelatedBooks] = useState([]); // Related books
   const params = useParams();
 
-  const handleIncrement = () => {
-    if (quantity < 50) {
-      setQuantity(quantity + 1);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
+  // API URLs (adjust to your actual API)
+  const bookApiUrl = `http://codeink.runasp.net/api/books/Published/${params.bookId}`;
+  const relatedBooksApiUrl = `http://codeink.runasp.net/api/books/${params.bookId}/related`;
 
   useEffect(() => {
+    // Fetch the book details
     axios
-      .get(`http://codeink.runasp.net/api/books/Published/${params.bookId}`)
+      .get(bookApiUrl)
       .then((response) => {
-        console.log(response.data.data);
-        setBook(response.data?.data || {});
+        setBook(response.data?.data || null);
       })
       .catch((error) => {
         console.error("Error fetching book:", error);
-        setBook({}); // Reset on error
+        setBook(null);
       });
-  }, []);
+
+    // Fetch related books
+    axios
+      .get(relatedBooksApiUrl)
+      .then((response) => {
+        const books = response.data?.data || [];
+        setRelatedBooks(books.slice(0, 4)); // Limit to first 4 books
+      })
+      .catch((error) => {
+        console.error("Error fetching related books:", error);
+        setRelatedBooks([]);
+      });
+  }, [params.bookId]);
+
+  // Increment and decrement handlers
+  const handleIncrement = () => {
+    if (quantity < 50) setQuantity(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
+  };
+
+  if (!book) {
+    return (
+      <div className="text-center text-lg font-bold mt-8">
+        Loading book details...
+      </div>
+    );
+  }
 
   return (
-    <>
-      <section>
-        <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-start justify-center gap-8 items-center">
-          {/* Image Section */}
-          <div className="md:w-2/6 md:h-auto flex-shrink-0 text-center">
-            <img
-              src={book.coverImageUrl}
-              alt="Book Image"
-              className="w-auto h-[480px] object-cover rounded-lg"
-            />
-          </div>
-
-          {/* Text Section */}
-          <div className="w-full md:w-7/10">
-            <h1 className="my-4 text-3xl font-extrabold">{book.title}</h1>
-            <span className="block mb-4 text-mainColor text-xl font-bold">
-              {book.price} EGP
-            </span>
-            <div className="mb-8 flex justify-center items-center">
-              <form className="max-w-xs border border-gray-300 rounded-xl h-11">
-                <div className="relative flex items-center max-w-[8rem]">
-                  <button
-                    type="button"
-                    onClick={handleDecrement}
-                    className="rounded-xl p-3 h-full hover:opacity-70"
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 2"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 1h16"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    value={quantity}
-                    className="bg-inherit border-x-0 border-gray-300 h-11 text-center text-sm block w-full"
-                    readOnly
-                  />
-                  <button
-                    type="button"
-                    onClick={handleIncrement}
-                    className="rounded-xl p-3 h-full hover:opacity-70"
-                  >
-                    <svg
-                      className="w-3 h-3 text-gray-900"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 18"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 1v16M1 9h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </form>
-
-              <button className="text-white bg-mainColor px-6 py-2 font-bold text-center text-sm w-44 mx-auto my-2 rounded-full transition-all duration-500 ease-in-out hover:opacity-70">
-                Add to Cart
-              </button>
-              <button className="text-white bg-black px-6 py-2 font-bold text-center text-sm w-44 mx-auto my-2 rounded-full transition-all duration-500 ease-in-out hover:opacity-70">
-                Buy Now
-              </button>
-            </div>
-            <div>
-              <div className="text-md font-medium text-center border-b border-gray-200">
-                <ul className="flex flex-wrap -mb-px">
-                  <li>
-                    <a
-                      href="#"
-                      className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                      onClick={() => {
-                        // Join category names with a comma
-                        const categoryNames = book.categories
-                          .map((category) => category.name)
-                          .join(", ");
-                        setContent(categoryNames); // Set the content to the joined category names
-                      }}
-                    >
-                      Category
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                      onClick={() => setContent(book.description)}
-                    >
-                      Description
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-mainColor hover:border-mainColor"
-                      onClick={() => setContent(shippingDelivery)}
-                    >
-                      Shipping & Delivery
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="capitalize mt-8 font-light">{content}</div>
-          </div>
-        </div>
-
-        <div>
-          <h1 className="font-extrabold text-lg mb-8">Related Products</h1>
-          <div className="grid gap-4 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
-            {/* Replace these with real related books */}
-            {/* <Book
-            title="Grooking Algorithms"
-            price="1000"
-            // ImgSource={GrokkingAlgoImg}
+    <section className="p-4">
+      {/* Book Details */}
+      <div className="mb-8 flex flex-col md:flex-row gap-8 items-start">
+        {/* Book Cover */}
+        <div className="md:w-1/3">
+          <img
+            src={book.coverImageUrl || "https://via.placeholder.com/150"}
+            alt={book.title || "Book Cover"}
+            className="w-full h-auto object-cover rounded-lg"
           />
-          <Book
-            title="Grooking Algorithms"
-            price="1000"
-            // ImgSource={GrokkingAlgoImg}
-          /> */}
+        </div>
+
+        {/* Book Info */}
+        <div className="md:w-2/3">
+          <h1 className="text-3xl font-bold mb-4">{book.title || "Book Title"}</h1>
+          <p className="text-xl font-semibold text-mainColor mb-4">
+            {book.price || 0} EGP
+          </p>
+          <div className="flex items-center gap-4 mb-6">
+            {/* Quantity Selector */}
+            <div className="flex items-center border rounded-lg overflow-hidden">
+              <button
+                onClick={handleDecrement}
+                className="p-2 bg-gray-200 hover:bg-gray-300"
+              >
+                -
+              </button>
+              <input
+                type="text"
+                value={quantity}
+                readOnly
+                className="w-12 text-center border-none"
+              />
+              <button
+                onClick={handleIncrement}
+                className="p-2 bg-gray-200 hover:bg-gray-300"
+              >
+                +
+              </button>
+            </div>
+
+            {/* Add to Cart Button */}
+            <button className="px-6 py-2 text-white bg-mainColor rounded-lg hover:bg-opacity-80">
+              Add to Cart
+            </button>
+          </div>
+
+          {/* Tabs */}
+          <div>
+            <div className="flex gap-4 border-b mb-4">
+              <button
+                onClick={() =>
+                  setContent(
+                    book.categories?.map((cat) => cat.name).join(", ") ||
+                      "No categories available"
+                  )
+                }
+                className="pb-2 border-b-2 border-transparent hover:border-mainColor"
+              >
+                Category
+              </button>
+              <button
+                onClick={() => setContent(book.description || "No description")}
+                className="pb-2 border-b-2 border-transparent hover:border-mainColor"
+              >
+                Description
+              </button>
+              <button
+                onClick={() =>
+                  setContent(
+                    "Books are delivered with a shipping company. Delivery duration is 2-4 working days."
+                  )
+                }
+                className="pb-2 border-b-2 border-transparent hover:border-mainColor"
+              >
+                Shipping & Delivery
+              </button>
+            </div>
+            <p className="text-gray-700">{content || "Select a tab"}</p>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Related Books Section */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Related Products</h2>
+        {relatedBooks.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+             {relatedBooks.map((relatedBook) => (
+              <Link
+                key={relatedBook.id}
+                to={`/client/book/${relatedBook.id}`} // Navigate to BookView page for each related book
+                className="border rounded-lg p-4"
+              >
+                <img
+                  src={relatedBook.coverImageUrl || "https://via.placeholder.com/150"}
+                  alt={relatedBook.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+                <h3 className="text-lg font-semibold mt-2 text-center">
+                  {relatedBook.title}
+                </h3>
+                <p className="text-mainColor font-bold text-center">
+                  {relatedBook.price || 0} EGP
+                </p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">No related books available.</p>
+        )}
+      </div>
+    </section>
   );
 }

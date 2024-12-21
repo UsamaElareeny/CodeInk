@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Modal from '../../components/Admin/Modal';
+import Modal from '../../components/Admin/Product/Modal';
 import Notification from '../../components/Admin/Notification';
-import Table from '../../components/Admin/Table';
+import Table from '../../components/Admin/Product/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBook, deleteBook, fetchBooks, updateBook } from '../../redux/booksSlice';
 

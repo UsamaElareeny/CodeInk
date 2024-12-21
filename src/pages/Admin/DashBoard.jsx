@@ -75,7 +75,7 @@ export default function DashBoard() {
         <SideBar open={open} setOpen={setOpen} menuItems={list} setListObj={setListObj}/>
         <main className= {open?" flex-grow ml-[235px] p-2 overflow-y-auto":" flex-grow ml-[60px] p-2 overflow-y-auto "}>
           <Header navigation={list.filter(x => x.current)} userNavigation={userNavigation} user={user} />
-          <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8 ">
+          <div className="mx-auto py-3">
             <Outlet />
              </div>
         </main>

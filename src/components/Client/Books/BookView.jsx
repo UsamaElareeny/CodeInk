@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Book from "./Book";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../../redux/cartSlice";
 
 export default function BookView() {
   const [content, setContent] = useState(""); // Content for tabs
@@ -9,7 +11,7 @@ export default function BookView() {
   const [book, setBook] = useState(null); // Current book data
   const [relatedBooks, setRelatedBooks] = useState([]); // Related books
   const params = useParams();
-
+  const dispatch = useDispatch();
   // API URLs (adjust to your actual API)
   const bookApiUrl = `http://codeink.runasp.net/api/books/Published/${params.bookId}`;
   const relatedBooksApiUrl = `http://codeink.runasp.net/api/books/${params.bookId}/related`;
@@ -99,7 +101,7 @@ export default function BookView() {
             </div>
 
             {/* Add to Cart Button */}
-            <button className="px-6 py-2 text-white bg-mainColor rounded-lg hover:bg-opacity-80">
+            <button className="px-6 py-2 text-white bg-mainColor rounded-lg hover:bg-opacity-80" onClick={() => dispatch(addItem(book))}>
               Add to Cart
             </button>
           </div>
@@ -145,8 +147,8 @@ export default function BookView() {
         <h2 className="text-2xl font-bold mb-4">Related Products</h2>
         {relatedBooks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-             {relatedBooks.map((relatedBook) => (
-              <Book book={relatedBook} />
+             {relatedBooks.map((relatedBook,i) => (
+              <Book key={i} book={relatedBook} />
             ))}
           </div>
         ) : (

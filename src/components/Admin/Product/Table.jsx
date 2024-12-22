@@ -70,6 +70,7 @@ export default function Table(props) {
           value={sortColumn}
           onChange={handleSortColumnChange}
           className="block w-auto px-2 py-1 text-sm border border-gray-300 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
+          style={{minWidth: "100px"}}
         >
           {columns.map((column, index) => (
             <option key={index} value={column}>

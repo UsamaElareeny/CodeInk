@@ -5,8 +5,8 @@ import A_Home from './pages/Admin/Home'
 import C_Home from './pages/Client/Home/Home'
 import BookView from './components/Client/Books/BookView'
 import Products from './pages/Admin/Products'
-import Logs from './pages/Admin/Logs'
-import Report from './pages/Admin/Report'
+import Category from './pages/Admin/Category'
+import Order from './pages/Admin/Order'
 import Settings from './pages/Admin/Settings'
 import Layout from './pages/Client/Layout'
 import LoginRegister from './pages/Client/LoginRegister/LoginRegister'
@@ -26,8 +26,8 @@ function App() {
           <Route path="/admin" element={<DashBoard />}>
             <Route index element={<A_Home />} />
             <Route path="products" element={<Products />} />
-            <Route path="logs" element={<Logs />} />
-            <Route path="report" element={<Report />} />
+            <Route path="category" element={<Category />} />
+            <Route path="order" element={<Order />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="/client" element={<Layout />}>

@@ -2,7 +2,7 @@ import Header from "../../components/Admin/Header"
 import SideBar from "../../components/Admin/SideBar"
 import { useState } from 'react'
 import { FaShoppingCart } from "react-icons/fa";
-import { TbReportSearch } from "react-icons/tb";
+import { TbBrandProducthunt } from "react-icons/tb";
 import { IoLogoBuffer } from "react-icons/io";
 import { MdOutlineDashboard } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
@@ -29,7 +29,7 @@ const menuItems = [
     current: false
   },
   {
-    icons: <FaShoppingCart size={30} />,
+    icons: <TbBrandProducthunt size={30} />,
     label: "Products",
     link:"/admin/products",
     current: false
@@ -37,14 +37,14 @@ const menuItems = [
   
   {
     icons: <IoLogoBuffer size={30} />,
-    label: "Logs",
-    link:"/admin/logs",
+    label: "Category",
+    link:"/admin/category",
     current: false
   },
   {
-    icons: <TbReportSearch size={30} />,
-    label: "Report",
-    link:"/admin/report",
+    icons: <FaShoppingCart size={30} />,
+    label: "Order",
+    link:"/admin/order",
     current: false
   },
   {
@@ -75,7 +75,7 @@ export default function DashBoard() {
         <SideBar open={open} setOpen={setOpen} menuItems={list} setListObj={setListObj}/>
         <main className= {open?" flex-grow ml-[235px] p-2 overflow-y-auto":" flex-grow ml-[60px] p-2 overflow-y-auto "}>
           <Header navigation={list.filter(x => x.current)} userNavigation={userNavigation} user={user} />
-          <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8 ">
+          <div className="mx-auto py-3">
             <Outlet />
              </div>
         </main>

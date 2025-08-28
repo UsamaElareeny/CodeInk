@@ -45,7 +45,6 @@ const StepReview = ({ nextStep, prevStep }) => {
                     &lt; Back
                 </button>
                 <button type="button" onClick={()=>{
-                    
                     dispatch(processPayment({deliveryMethodId:id, cartItems:cartItems.map(({ name: bookTitle,id:bookId, ...rest }) => ({ ...rest, bookId, bookTitle }))}))
                     nextStep()
                     }} className={styles.nextButton}>

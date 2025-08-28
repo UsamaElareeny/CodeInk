@@ -8,14 +8,16 @@
   height: 380px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-
+  justify-content: space-between; /* Adjust to allow for proper spacing */
 }
 
 /* Remove hover effect */
 .book:hover {
   transform: none;
   height: 380px;
+}
+.book:hover .cart-button {
+  opacity: 1; /* Show the cart button on hover */
 }
 
 .image img {
@@ -46,8 +48,10 @@
   color: white;
   background-color: black;
 }
+.wishlist-button:hover {
+  opacity: 0.8;
+}
 
-/* Book info (title and price) */
 .book-info {
   bottom: 3px;
   background: white;
@@ -58,7 +62,9 @@
   position: absolute;
   padding-top: 7px;
   width: 100%;
-  flex-grow: 1;
+  margin-top: 10px;
+  padding: 10px;
+  flex-grow: 1; /* Allow this section to grow and push content to the bottom */
 }
 
 .title {
@@ -73,7 +79,7 @@
   text-align: center;
 }
 
-/* Cart button */
+/* Cart button (always visible at the bottom) */
 .cart-button {
   background-color: #ed9c4b;
   color: white;
@@ -85,6 +91,9 @@
   width: 180px;
   border-radius: 50px;
   position: relative;
+  transition: all 0.5s ease-in-out;
+  opacity: 0; /* Start hidden */
+  transition-delay: 100ms;
   margin-bottom: 10px; /* Ensure space between the button and the bottom of the card */
 }
 

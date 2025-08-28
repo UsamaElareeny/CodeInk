@@ -5,6 +5,7 @@ import Book from "./Book";
 import { useDispatch } from "react-redux";
 import { addItem } from "../../../redux/cartSlice";
 
+
 export default function BookView() {
   const [content, setContent] = useState(""); // Content for tabs
   const [quantity, setQuantity] = useState(1); // Quantity for cart
@@ -12,6 +13,7 @@ export default function BookView() {
   const [relatedBooks, setRelatedBooks] = useState([]); // Related books
   const params = useParams();
   const dispatch = useDispatch();
+
   // API URLs (adjust to your actual API)
   const bookApiUrl = `http://codeink.runasp.net/api/books/Published/${params.bookId}`;
   const relatedBooksApiUrl = `http://codeink.runasp.net/api/books/${params.bookId}/related`;
@@ -40,6 +42,36 @@ export default function BookView() {
         setRelatedBooks([]);
       });
   }, [params.bookId]);
+
+  // Increment and decrement handlers
+  const handleIncrement = () => {
+    if (quantity < 50) setQuantity(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
+  };
+
+  if (!book) {
+    return (
+      <div className="text-center text-lg font-bold mt-8">
+        Loading book details...
+      </div>
+    );
+  }
+
+  return (
+    <section className="p-4">
+      {/* Book Details */}
+      <div className="mb-8 flex flex-col md:flex-row gap-8 items-start">
+        {/* Book Cover */}
+        <div className="md:w-1/3">
+          <img
+            src={book.coverImageUrl || "https://via.placeholder.com/150"}
+            alt={book.title || "Book Cover"}
+            className="w-full h-auto object-cover rounded-lg"
+          />
+        </div>
 
   // Increment and decrement handlers
   const handleIncrement = () => {
@@ -101,7 +133,9 @@ export default function BookView() {
             </div>
 
             {/* Add to Cart Button */}
+
             <button className="px-6 py-2 text-white bg-mainColor rounded-lg hover:bg-opacity-80" onClick={() => dispatch(addItem(book))}>
+            <button className="px-6 py-2 text-white bg-mainColor rounded-lg hover:bg-opacity-80">
               Add to Cart
             </button>
           </div>
@@ -147,8 +181,27 @@ export default function BookView() {
         <h2 className="text-2xl font-bold mb-4">Related Products</h2>
         {relatedBooks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
              {relatedBooks.map((relatedBook,i) => (
               <Book key={i} book={relatedBook} />
+             {relatedBooks.map((relatedBook) => (
+              <Link
+                key={relatedBook.id}
+                to={`/client/book/${relatedBook.id}`} // Navigate to BookView page for each related book
+                className="border rounded-lg p-4"
+              >
+                <img
+                  src={relatedBook.coverImageUrl || "https://via.placeholder.com/150"}
+                  alt={relatedBook.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+                <h3 className="text-lg font-semibold mt-2 text-center">
+                  {relatedBook.title}
+                </h3>
+                <p className="text-mainColor font-bold text-center">
+                  {relatedBook.price || 0} EGP
+                </p>
+              </Link>
             ))}
           </div>
         ) : (

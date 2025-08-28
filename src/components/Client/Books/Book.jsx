@@ -49,6 +49,19 @@ export default function Book({ book }) {
           </div>
 
         </div>
+        <div className="price">${book.price} EGP</div>
+      </div>
+
+      {/* Add to Cart button */}
+      <div className="cart-button">
+        <button
+          onClick={() => {
+            dispatch(addItem(book));
+            console.log(items);
+          }}
+        >
+          Add to Cart
+        </button>
       </div>
 
       

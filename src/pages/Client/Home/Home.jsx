@@ -14,8 +14,8 @@ export default function Home() {
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch books with sorting option
-  const fetchBooks = (sortBy,page,size) => {
+  // Fetch books with sorting, pagination, and category filter
+  const fetchBooks = (sortBy, page, size) => {
     let endpoint = `http://codeink.runasp.net/api/books/Published?pageNumber=${page}&pageSize=${size}`;
 
     // Append query parameters for sorting
@@ -31,21 +31,20 @@ export default function Home() {
         break;
     }
 
-    if(selectedCategory!=null){
+    if (selectedCategory != null) {
       endpoint += `&categoryId=${selectedCategory}`;
     }
 
     axios
       .get(endpoint)
       .then((response) => {
-        // Ensure response has data
         console.log(response.data.data);
-        setBooks(response.data.data || {}); // Set empty array if no data
+        setBooks(response.data.data || {});
         setTotalPages(response.data.data.totalPages);
       })
       .catch((error) => {
         console.error("Error fetching books:", error);
-        setBooks({}); // Reset to avoid breaking the app
+        setBooks({});
       });
   };
 
@@ -54,20 +53,19 @@ export default function Home() {
     axios
       .get("http://codeink.runasp.net/api/categories")
       .then((response) => {
-        setCategories(response.data?.data || []); // Ensure categories are set properly
+        setCategories(response.data?.data || []);
       })
       .catch((error) => {
         console.error("Error fetching categories:", error);
-        setCategories([]); // Reset to avoid errors
+        setCategories([]);
       });
   };
 
   useEffect(() => {
-    fetchBooks(sortOption,currentPage,pageSize); // Fetch books when sortOption changes
-    handleFetchCategories(); // Fetch categories
-  }, [sortOption,selectedCategory,currentPage,pageSize]);
+    fetchBooks(sortOption, currentPage, pageSize);
+    handleFetchCategories();
+  }, [sortOption, selectedCategory, currentPage, pageSize]);
 
-  
   // Handle sort change
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -76,31 +74,28 @@ export default function Home() {
   // Handle page change
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
-    console.log(newPage);
+    console.log("Changed page:", newPage);
   };
 
-  // Handle search value change
-  const handleSearchChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-
+  // Handle page size change
   const handlePageSizeChange = (size) => {
-    setPageSize(Number(size)); 
-  
-    setCurrentPage(1); 
-  
-    fetchBooks(sortOption,currentPage,pageSize); 
+    const newSize = Number(size);
+    setPageSize(newSize);
+    setCurrentPage(1); // reset to first page
+    fetchBooks(sortOption, 1, newSize);
   };
-  
 
   return (
     <>
       <section className="flex flex-col md:flex-row my-8">
-        <Categories categories={categories} setSelectedCategory={setSelectedCategory} />
+        <Categories
+          categories={categories}
+          setSelectedCategory={setSelectedCategory}
+        />
         <Books books={books} handleSortChange={handleSortChange} />
       </section>
 
-
+      {/* Pagination and page size controls */}
       <div className="flex justify-center items-center my-4 space-x-4">
         {/* Page Size Dropdown */}
         <div className="flex items-center space-x-2">
@@ -151,7 +146,6 @@ export default function Home() {
           Next
         </button>
       </div>
-
     </>
   );
 }
